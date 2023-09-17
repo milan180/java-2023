@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  resto:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: igre
+    image: igre:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - rest-network
+    volumes:
+      - java-data:/app/uploads
+    depends_on:
+      - mysql
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    networks:
+      - rest-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=igre
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: always
+networks:
+  rest-network:
+    driver: bridge
+volumes:
+  mysql-data:
+  java-data:
